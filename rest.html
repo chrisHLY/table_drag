@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script language="javascript" type="text/javascript" src="jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="column_drag.js"></script>
+</head>
+<style>
+    .drag_class{
+        border-color: #999;
+    }
+    .drag_class thead tr th{
+        background: #009dd9;
+        color: #fafafa;
+        text-align: center;
+        height: 32px;
+    }
+    .drag_class tbody tr td{
+        text-align: left;
+        padding: 0 5px;
+    }
+    .drag_class tbody tr:nth-child(even){
+        background: #ccc;
+    }
+    .drag_class_lin{
+        font-weight: bold;
+        color: #fafafa;
+        text-align: center;
+        background: #000;
+    }
+</style>
+<body>
+<div style="width: 100%;height: 400px;overflow: scroll;">
+    <table id="tb" class="drag_class" border="1" cellspacing="0" cellpadding="0">
+        <thead>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<script>
+    $.ajax({
+        url : "column_drag.json",
+        data : "json",
+        type : "post",
+        async : "isAsync",
+        dataType : "json",
+        success : function (data) {
+            if(data.code==0000){
+                var text=data.data.data.data;
+                for(var i=0; i<text.length; i++){
+                    var tr="";
+                    var td="";
+                    var th="";
+                    if(i==0){
+                        for(var j=0; j<text[i].length; j++){
+                            th+="<th id='"+ text[i][j] +"'>"+text[i][j]+"</th>";
+                        }
+                        tr+="<tr>"+th+"</tr>"
+                        $("#tb>thead").append(tr);
+                    }else {
+                        for(var j=0; j<text[i].length; j++){
+                            td+="<td>"+text[i][j]+"</td>";
+                        }
+                        tr+="<tr>"+td+"</tr>"
+                        $("#tb>tbody").append(tr);
+                        $("#tb").columnDrag();
+                    }
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>
